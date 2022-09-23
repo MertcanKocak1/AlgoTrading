@@ -1,8 +1,9 @@
 from binance.enums import *
 
+import ClientData
 from Account.Account import Account
 from Database.Database import Database
-import ClientData
+
 
 class LongOrderExit:
     def __init__(self):
@@ -11,7 +12,8 @@ class LongOrderExit:
 
     def Execute(self):
         try:
-            order = self.acc.client.create_margin_order(symbol="BTCUSDT", side=SIDE_SELL, isIsolated='TRUE',
+            order = self.acc.client.create_margin_order(symbol=ClientData.tradeSymbol, side=SIDE_SELL,
+                                                        isIsolated='TRUE',
                                                         type=ORDER_TYPE_MARKET,
                                                         quantity=self.GetTotalBtc())
             self.RepayUsdt()
@@ -27,10 +29,11 @@ class LongOrderExit:
     def RepayUsdt(self):
         borrowed = self.acc.client.get_isolated_margin_account()['assets'][0]['quoteAsset']['borrowed']
         try:
-            self.acc.client.repay_margin_loan(asset="USDT", amount=borrowed, symbol="BTCUSDT", isIsolated='TRUE')
-            print("RepayLoan Long Order Execute")
+            self.acc.client.repay_margin_loan(asset="USDT", amount=borrowed, symbol=ClientData.tradeSymbol,
+                                              isIsolated='TRUE')
+            print("RepayLoan Long Order Executed")
         except Exception as e:
-            print("Repay Loan Long BUM BUM ", e)
+            print("Something Wrong ", e)
 
     def GetTotalBtc(self) -> float:
         return self.acc.FloorPrecisionFix(

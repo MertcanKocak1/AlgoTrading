@@ -23,7 +23,6 @@ class Database:
     def closeConnection(self):
         self.conn.close()
 
-
     def CreateNewSpotLog(self, order: dict) -> None:
         self.cursor = self.conn.cursor()
         sqlInsertCode = '''insert into spotlogs(symbol, clientOrderId, tStamp, 

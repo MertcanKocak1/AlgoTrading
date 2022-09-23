@@ -27,4 +27,3 @@ class SpotPositionState(PositionState):
         if sf.DummyFunction():
             GetOutOfPosition("Dummy")
             return
-

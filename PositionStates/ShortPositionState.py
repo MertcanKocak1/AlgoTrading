@@ -19,13 +19,14 @@ class ShortPositionState(PositionState):
             ShortOrderExit().Execute()
             context.set_state(PositionStates.WaitingPositionState.WaitingPositionState())
 
-        if acc.GetLastPrice() > ClientData.marginLastPosition + ((ClientData.marginLastPosition / 100) * 0.5):
+        if acc.GetLastPrice() > ClientData.marginLastPosition + (
+                (ClientData.marginLastPosition / 100) * ClientData.takeProfitAmount):
             GetOutOfPosition("Stop Loss")
             return
-        if acc.GetLastPrice() < ClientData.marginLastPosition - ((ClientData.marginLastPosition / 100) * 0.8):
+        if acc.GetLastPrice() < ClientData.marginLastPosition - (
+                (ClientData.marginLastPosition / 100) * ClientData.stopLossAmount):
             GetOutOfPosition("Take Profit")
             return
         if sf.DummyFunction():
             GetOutOfPosition("Dummy")
             return
-

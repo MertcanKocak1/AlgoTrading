@@ -1,11 +1,9 @@
-import ClientData
-
 from binance.enums import *
 
-from Database.Database import Database
-
+import ClientData
 from Account.Account import Account
 from Account.Order.Order import Order
+from Database.Database import Database
 
 
 class ShortOrderEntry(Order):
@@ -15,7 +13,7 @@ class ShortOrderEntry(Order):
 
     def Execute(self):
         try:
-            order = self.acc.client.create_margin_order(symbol="BTCUSDT", side=SIDE_SELL, type="MARKET",
+            order = self.acc.client.create_margin_order(symbol=ClientData.tradeSymbol, side=SIDE_SELL, type="MARKET",
                                                         quantity=self.MaxBTCAmount(), sideEffectType="MARGIN_BUY",
                                                         isIsolated=True)
             order['price'] = self.acc.CalculateWeightedAvg(order)

@@ -1,9 +1,6 @@
 import time
 
-import pandas as pd
-
 import ClientData
-import Data.DataManagement
 import PositionStates.PositionContext
 import PositionStates.WaitingPositionState
 from Account.Account import Account
@@ -22,10 +19,12 @@ class LongPositionState(PositionState):
             LongOrderExit().Execute()
             context.set_state(PositionStates.WaitingPositionState.WaitingPositionState())
 
-        if acc.GetLastPrice() > ClientData.marginLastPosition + ((ClientData.marginLastPosition / 100) * 1.0):
+        if acc.GetLastPrice() > ClientData.marginLastPosition + (
+                (ClientData.marginLastPosition / 100) * ClientData.takeProfitAmount):
             GetOutOfPosition("Take Profit")
             return
-        if acc.GetLastPrice() < ClientData.marginLastPosition - ((ClientData.marginLastPosition / 100) * 1.0):
+        if acc.GetLastPrice() < ClientData.marginLastPosition - (
+                (ClientData.marginLastPosition / 100) * ClientData.stopLossAmount):
             GetOutOfPosition("Stop Loss")
             return
         if sf.DummyFunction():

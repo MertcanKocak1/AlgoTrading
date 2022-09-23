@@ -1,9 +1,8 @@
 from binance.enums import *
 
+import ClientData
 from Account.Account import Account
 from Database.Database import Database
-
-import ClientData
 
 
 class LongOrderEntry:
@@ -15,7 +14,7 @@ class LongOrderEntry:
         try:
             self.LoanUsdt()
             lastFree = self.acc.client.get_isolated_margin_account()['assets'][0]['quoteAsset']['free']
-            order = self.acc.client.create_margin_order(symbol="BTCUSDT", side=SIDE_BUY, isIsolated='TRUE',
+            order = self.acc.client.create_margin_order(symbol=ClientData.tradeSymbol, side=SIDE_BUY, isIsolated='TRUE',
                                                         type=ORDER_TYPE_MARKET,
                                                         quantity=self.TotalBtcToBuy(lastFree))
             order['price'] = self.acc.CalculateWeightedAvg(order)
