@@ -6,3 +6,5 @@ tradeSymbol = "BTCUSDT"
 csvDataFileName = "5MinuteData.csv"
 takeProfitAmount = 1.02
 stopLossAmount = 1.02
+telegramBotApiKey = "-"
+myUserId = "-"

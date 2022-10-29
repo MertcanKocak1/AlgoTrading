@@ -32,20 +32,18 @@ class Account:
     def RepayLoan(self, assetName: str, amount: float) -> None:
         self.client.repay_margin_loan(asset=assetName, amount=amount)
 
-    def GetLastPrice(self, symbol=ClientData.tradeSymbol) -> float:
+    def GetLastPrice(self, symbol= ClientData.tradeSymbol) -> float:
         return self.FloorPrecisionFix(float(self.client.get_ticker(symbol=symbol)['lastPrice']), 5)
 
     def GetMaxMarginAmount(self, assetName: str) -> float:
         return self.FloorPrecisionFix(float(
-            self.client.get_max_margin_loan(asset=assetName, isolatedSymbol=ClientData.tradeSymbol, isIsolated=True)[
-                'amount']), 5)
+            self.client.get_max_margin_loan(asset=assetName, isolatedSymbol=ClientData.tradeSymbol, isIsolated=True)['amount']), 5)
 
     @staticmethod
     def FloorPrecisionFix(amount, precision: int):
         return math.floor(amount * 10 ** precision) / 10 ** precision
 
     def IsClientAlreadyInMarginOrder(self, symbol: str = ClientData.tradeSymbol) -> bool:
-        # if client already in order return true otherwise return false
         return not (self.client.get_open_margin_orders(symbol=symbol).__len__() == 0)
 
     def SpotGetAssetBalance(self, symbol: str = "USDT") -> float:
@@ -68,11 +66,7 @@ class Account:
         ClientData.spotLastPosition = self.GetLastPositionPrice()
 
     def SumOfCommission(self, order: dict):
-        # tek satıra çekilebilir ama böyle daha açıklayıcı
-        sum = 0.0
-        for fill in order['fills']:
-            sum += float(fill['commission'])
-        return sum
+        return sum(float(fill['commission']) for fill in order['fills'])
 
     def CalculateWeightedAvg(self, order: dict):
         price = []

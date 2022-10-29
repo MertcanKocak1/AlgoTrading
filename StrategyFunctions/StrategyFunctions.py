@@ -1,14 +1,12 @@
 import pandas as pd
-
 import ClientData
-
 
 class StrategyFunctions:
     __instance = None
 
     def __init__(self):
         if StrategyFunctions.__instance is not None:
-            raise Exception('This Class Singleton')
+            raise Exception('This Class Singleton!')
         else:
             StrategyFunctions.__instance = self
 
@@ -18,6 +16,7 @@ class StrategyFunctions:
             StrategyFunctions()
         return StrategyFunctions.__instance
 
+    # RSI Functions
     def IsRsiLowerThan(self, value) -> bool:
         df = pd.read_csv(ClientData.csvDataFileName)
         return df.iloc[-2]['RSI'] < value
@@ -27,8 +26,8 @@ class StrategyFunctions:
         return df.iloc[-2]['RSI'] > value
 
     # Stoch Functions
-    # K Mavi
-    # D Turuncu
+    # K Blue
+    # D Orange
     def IsStochDLowerThan(self, value):
         df = pd.read_csv(ClientData.csvDataFileName)
         return df.iloc[-2]['STOCHD'] < value
@@ -38,14 +37,21 @@ class StrategyFunctions:
         return df.iloc[-2]['STOCHD'] > value
 
     def IsStochCrossOver(self) -> bool:
-        # D K'yı Yukarıdan Kesiyorsa
         df = pd.read_csv(ClientData.csvDataFileName)
         return df.iloc[-3]['STOCHK'] > df.iloc[-3]['STOCHD'] and df.iloc[-2]['STOCHK'] < df.iloc[-2]['STOCHD']
 
     def IsStochCrossUnder(self) -> bool:
-        # D K'yı Aşağıdan Kesiyorsa
         df = pd.read_csv(ClientData.csvDataFileName)
         return df.iloc[-3]['STOCHK'] < df.iloc[-3]['STOCHD'] and df.iloc[-2]['STOCHK'] > df.iloc[-2]['STOCHD']
+
+    # SAR Functions
+    def IsSARCrossUnder(self) -> bool:
+        df = pd.read_csv(ClientData.csvDataFileName)
+        return df.iloc[-2]['SAR'] < df.iloc[-2]['Close'] and df.iloc[-3]['SAR'] > df.iloc[-3]['Close']
+
+    def IsSARCrossOver(self) -> bool:
+        df = pd.read_csv(ClientData.csvDataFileName)
+        return df.iloc[-2]['SAR'] > df.iloc[-2]['Close'] and df.iloc[-3]['SAR'] < df.iloc[-3]['Close']
 
     # Macd Functions
     def IsMacdTurnedGreener(self) -> bool:
@@ -55,16 +61,13 @@ class StrategyFunctions:
 
     def isMacdTurnedSoftGreener(self) -> bool:
         df = pd.read_csv(ClientData.csvDataFileName)
-        return df.iloc[-2]['MACDHIST'] >= 0 and df.iloc[-3]['MACDHIST'] > df.iloc[-2]['MACDHIST']
+        return 0 <= df.iloc[-2]['MACDHIST'] < df.iloc[-3]['MACDHIST']
 
     def isMacdTurnedSoftRedder(self) -> bool:
         df = pd.read_csv(ClientData.csvDataFileName)
-        return df.iloc[-2]['MACDHIST'] <= 0 and df.iloc[-3]['MACDHIST'] < df.iloc[-2]['MACDHIST']
+        return 0 >= df.iloc[-2]['MACDHIST'] > df.iloc[-3]['MACDHIST']
 
     def isMacdTurnedRedder(self) -> bool:
         df = pd.read_csv(ClientData.csvDataFileName)
         return df.iloc[-2]['MACDHIST'] < 0 and df.iloc[-4]['MACDHIST'] < df.iloc[-3]['MACDHIST'] \
                and df.iloc[-3]['MACDHIST'] > df.iloc[-2]['MACDHIST']
-
-    def DummyFunction(self):
-        pass
