@@ -1,6 +1,6 @@
 # Algo Trading Project
 
-This is a personal algo trading project. 
+This is a personal algo trading project. This repository educational purpose only. 
 In this project i used Singleton and State Design Patterns. 
 
 ### Requirements
